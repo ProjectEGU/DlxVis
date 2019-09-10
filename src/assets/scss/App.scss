@@ -1,0 +1,74 @@
+@import '../../../node_modules/antd/dist/antd.css';
+$bg-color: rgb(113, 177, 147);
+$border-color: rgb(194, 219, 136);
+body {
+    background-color: #d1d0d0;
+}
+
+#animA {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 10px;
+    right: 0px;
+    #mainS {
+        position: absolute;
+        margin-left: 10px;
+        left: 21%;
+        right: 0px;
+        bottom: 0px;
+        top: 0px;
+        margin: 5px 5px 5px 5px;
+        height: 100%;
+        overflow: hidden;
+        float: left;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        #maincanvas {
+            background: #f0f5ff;
+        }
+    }
+    #controlS {
+        float: left;
+        font-family: helvetica, arial, sans-serif;
+        margin: 5px 5px 5px 5px;
+        width: 21%;
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+.matrixtextdisp {
+    width: 100%;
+    font-family: Lucida Console, Courier, monospace;
+    font-size: 10px;
+
+    overflow:scroll;
+}
+
+.infodisp {
+    font-family: Lucida Console, Courier, monospace;
+    display: table-cell;
+  vertical-align: middle;
+  margin-left:15px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.ant-collapse-header, .ant-radio-button-wrapper span{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.controls-row {
+    display: table;
+
+    width: 100%;
+    min-height: 32px;
+}
