@@ -26,6 +26,6 @@
 
 * Build app once to `/dist/`
 
-## 3rd party code
+## Third party code
 * [Ant Design UI for React](https://ant.design/docs/react/introduce)
 * [React-Webpack-Typescript Starter](https://github.com/vikpe/react-webpack-typescript-starter)

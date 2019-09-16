@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./../assets/scss/ArrowLink.scss";
 import { Direction } from "./dlxmatrixstate";
+import { TweenMax } from "gsap/TweenMax";
 
 interface Anim {
     endTime: number,
@@ -56,9 +57,10 @@ export default class ArrowLink extends React.Component<ArrowProps, ArrowState> {
     animRef: React.RefObject<SVGAnimateElement> = null;
     constructor(props: ArrowProps) {
         super(props);
+        let thisD = this.new_d();
         this.state = {
             curAnim: {
-                endTime: 0, durationMS: 0, animValues: ["", this.new_d()],
+                endTime: 0, durationMS: 0, animValues: [thisD, thisD],
             },
             curId: ArrowLink.arrowId++
         }
@@ -88,7 +90,6 @@ export default class ArrowLink extends React.Component<ArrowProps, ArrowState> {
                     markerWidth={this.props.arrowWidth} markerHeight={this.props.arrowHeight} orient="auto">
                     <path d="M 0 0 L 19 25 L 0 50 L 50 25 z " stroke={this.props.arrowColor} fill={this.props.arrowColor} />
                 </marker>
-
                 <path
                     d={this.state.curAnim.animValues[1]}
                     stroke={this.props.lineColor} fill="none"
@@ -96,8 +97,9 @@ export default class ArrowLink extends React.Component<ArrowProps, ArrowState> {
                     markerEnd={"url(#pointer-" + this.state.curId + ")"}
                     visibility={this.props.visible ? "visible" : "hidden"}
                     ref={this.svgRef}
+                    id={'arrow' + this.state.curId}
                 >
-                    {animMotion}
+                    {/*animMotion*/}
                 </path>
             </svg>
         );
@@ -152,16 +154,19 @@ export default class ArrowLink extends React.Component<ArrowProps, ArrowState> {
             default:
                 break;
         }
-        let bezPts: string = [ptA.x, ptA.y, ptB.x, ptB.y].join(" ");
+        let bezPts: string = [ptA.x, ptA.y, ptB.x, ptB.y].map(x => Math.round(x)).join(" ");
         return " \
-                M " + this.props.origX + " " + this.props.origY + " \
+                M " + Math.round(this.props.origX) + " " + Math.round(this.props.origY) + " \
                 C "+ bezPts + "\
-                " + this.props.destX + " " + this.props.destY;
+                " + Math.round(this.props.destX) + " " + Math.round(this.props.destY);
     }
 
     componentDidUpdate(prevProps: ArrowProps) {
         // return if coords are the exact same as before.
-        if (prevProps === this.props) {
+        if (prevProps.origX == this.props.origX
+            && prevProps.origY == this.props.origY
+            && prevProps.destX == this.props.destX
+            && prevProps.destY == this.props.destY) {
             return;
         }
 
@@ -191,7 +196,19 @@ export default class ArrowLink extends React.Component<ArrowProps, ArrowState> {
         }, () => { // setstate callback
             //this.animRef.current.endElement();
 
-            this.animRef.current.beginElement();
+            // this.animRef.current.beginElement();
+            TweenMax.to(this.svgRef.current, this.props.animDurMS / 1000, {
+                startAt:
+                {
+                    attr: {
+                        d: this.state.curAnim.animValues[0]
+                    }
+                },
+                attr: {
+                    d: this.state.curAnim.animValues[1]
+                },
+                ease: "Power2.easeOut"
+            });
         });
     }
 

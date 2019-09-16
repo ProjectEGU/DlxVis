@@ -65,6 +65,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "antd": "^3.23.2"
+    "antd": "^3.23.2",
+    "gsap": "^2.1.3"
   }
 }

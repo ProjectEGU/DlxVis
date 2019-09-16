@@ -138,7 +138,7 @@ export default class DLXDisplay extends React.Component<DLXProps, DLXState> {
             this.props.state.links.forEach((link) => {
                 //if(link.origRow > -1 || link.origCol > 1) return;
 
-                let visible = !(link.IsOpposite || link.IsSelf);
+                let visible = !(link.IsOpposite );//!(link.IsOpposite || link.IsSelf);
                 /* let visible =
                      link.origRow == -1 && link.origCol == 1
                      && !(link.IsOpposite || link.IsSelf)

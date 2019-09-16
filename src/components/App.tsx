@@ -7,7 +7,7 @@ import "./../assets/scss/App.scss";
 
 import { Collapse, Button, Radio, Icon } from 'antd';
 
-const { Panel } = Collapse; // how does this work ? how u define constant of a type equal to another type ?
+const { Panel } = Collapse; // define constant of a type equal to another type ?
 import DLXDisplay from "./DlxDisplay"
 import { DLXMatrix } from "./dlxmatrix"
 import { DLXMatrixState } from "./dlxmatrixstate";
@@ -17,8 +17,8 @@ interface AppState {
     matrixStrings: string[],
     matrixStates: DLXMatrixState[],
     solutionSet: string[][],
-    solutionText: string, // should we cache the solution text for faster access ? or is it bad code ?
-    solutionTextRows: number, // todo possible hav floating buttons to hide the rows ?
+    solutionText: string, // cache the solution text for faster access ?
+    solutionTextRows: number, // todo possible have floating buttons to hide the rows ?
     stateIdx: number,
     solvingBegan: boolean
 }
@@ -103,7 +103,7 @@ class App extends React.Component<{}, AppState> {
                         <Panel header="Board State View" key="4">
                             <textarea rows={16}
                                 className="matrixtextdisp"
-                                placeholder="The corresponding board state with the current step of the algorithm will appear here."
+                                placeholder="The board state corresponding with the current step of the algorithm will appear here."
                                 readOnly={true}
                                 value={""}>
                             </textarea>

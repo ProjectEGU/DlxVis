@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./../assets/scss/MatrixBlock.scss";
 import { Direction } from "./dlxmatrixstate";
+import { TweenMax } from "gsap/TweenMax";
 
 export enum CellState {
     Covered,
@@ -35,16 +36,18 @@ export interface MatrixBlockState {
 }
 
 export class MatrixBlock extends React.Component<MatrixBlockProps, MatrixBlockState> {
-    private static arrowId: number = 0;
+
+
 
     static defaultProps: MatrixBlockProps = {
         posX: 0, posY: 0, width: 0, height: 0,
         style: {},
-        animDurMS: 800
+        animDurMS: 500
     }
 
     animRef: React.RefObject<SVGAnimateElement> = null;
     animRef2: React.RefObject<SVGAnimateElement> = null;
+    svgRef: React.RefObject<SVGRectElement> = null;
     constructor(props: MatrixBlockProps) {
         super(props);
 
@@ -65,6 +68,7 @@ export class MatrixBlock extends React.Component<MatrixBlockProps, MatrixBlockSt
         }
         this.animRef = React.createRef<SVGAnimateElement>();
         this.animRef2 = React.createRef<SVGAnimateElement>();
+        this.svgRef = React.createRef<SVGRectElement>();
     }
     /*
     TODO: refactor to dynamically generate <animate/> tags per style that changed.
@@ -117,10 +121,11 @@ export class MatrixBlock extends React.Component<MatrixBlockProps, MatrixBlockSt
                     strokeWidth={this.props.style.borderWidth}
                     visibility={this.props.style.visible ? "visible" : "hidden"}
                     rx="3"
+                    ref={this.svgRef}
                 >
-                    {animColorBg}
-                    {animColorBorder}
-                    
+                    {/*animColorBg*/}
+                    {/*animColorBorder*/}
+
                 </rect>
             </svg>
         );
@@ -151,15 +156,22 @@ export class MatrixBlock extends React.Component<MatrixBlockProps, MatrixBlockSt
 
             return newState;
         }, () => {
-            this.animRef.current.beginElement();
-            this.animRef2.current.beginElement();
-            // setstate callback
-            /*this.animRef.current.endElement();
-            this.animRef.current.beginElement();
-            window.setTimeout(
-                () => { // window timeout callback
-                    this.render();
-                }, this.props.animDurMS + 20)*/
+            //this.animRef.current.beginElement();
+            //this.animRef2.current.beginElement();
+            TweenMax.to(this.svgRef.current, this.props.animDurMS / 1000, {
+                startAt:
+                {
+                    attr: {
+                        stroke: this.state.stylesCache[0].borderColor,
+                        fill: this.state.stylesCache[0].backgroundColor
+                    }
+                },
+                attr: {
+                    stroke: this.state.stylesCache[1].borderColor,
+                    fill: this.state.stylesCache[1].backgroundColor
+                },
+                ease: "Power2.easeOut"
+            });
         });
     }
 

@@ -239,8 +239,7 @@ export class DLXMatrix {
     }
 
     public static InitializeNQueens(n: number): DLXMatrix {
-        return null;
-        /*
+
         // Array<T> is used in favor of T[] when the length of the array in question is expected to be changed.
         let nodeList: Array<DLXNode> = [];
 
@@ -251,10 +250,14 @@ export class DLXMatrix {
         nodeList.push(root);
 
         let nRows = n * n;
-        let nCols = n * n * 4;
+        let nCols = 6 * n - 2;
+        let secondaryColOffset = 2 * n; // offset of where secondary column begins, inclusive.
         let nConstraints = 4;
         let colList = new Array(nCols);
         let rowNames = new Array(nRows);
+
+        console.assert(secondaryColOffset > 0);
+        console.assert(secondaryColOffset < nCols);
 
         // Init header row
         // Assume nCols >= 1
@@ -272,21 +275,25 @@ export class DLXMatrix {
             });
             colList[i].up = colList[i];
             colList[i].down = colList[i];
-
-            colList[i - 1].right = colList[i];
-            colList[i].left = colList[i - 1];
+            if (i < secondaryColOffset) {
+                colList[i - 1].right = colList[i];
+                colList[i].left = colList[i - 1];
+            } else {
+                colList[i].left = colList[i];
+                colList[i].right = colList[i];
+            }
         }
 
         colList[0].left = root;
-        colList[nCols - 1].right = root;
+        colList[secondaryColOffset - 1].right = root;
         root.right = colList[0];
-        root.left = colList[nCols - 1];
+        root.left = colList[secondaryColOffset - 1];
         root.up = root;
         root.down = root;
 
         // Label header row
         for (let i = 0; i < nCols; i++) {
-            colList[i].label = "Column Header " + i;
+            colList[i].label = "Column Header " + i + (i < secondaryColOffset ? " (primary)" : " (secondary)");
         }
 
         nodeList.push(...colList);
@@ -300,18 +307,25 @@ export class DLXMatrix {
 
                 // Generate chain of links for a single row
                 let rowNodes: DLXNode[] = new Array(nConstraints);
-                for (let i = 0; i < 3; i++) {
+                for (let i = 0; i < nConstraints; i++) {
                     // Determine constraint group offset
-                    let colId = i * n * n;
+                    let colId = 0;
                     if (i == 0) {
-                        // Number N in some row / column
-                        colId += ((pColPos * n) + pRowPos);
+                        // Queen placed in row N
+                        colId = pRowPos;
+                        //colId = 5;
                     } else if (i == 1) {
-                        // Number N must appear in row
-                        colId += ((pNum * n) + pRowPos);
+                        // Queen placed in col N
+                        colId = n + pColPos;
+                        //colId = 6;
                     } else if (i == 2) {
-                        // Number N must appear in column
-                        colId += ((pNum * n) + pColPos);
+                        // Queen placed in d1
+                        colId = 2 * n + (n - 1 - pRowPos) + pColPos;
+                        //colId = 7;
+                    } else if (i == 3) {
+                        // Queen placed in d2
+                        colId = 2 * n + (2 * n - 1) + pRowPos + pColPos;
+                        //colId = 15;
                     }
 
                     rowNodes[i] = new DLXNode({
@@ -352,7 +366,7 @@ export class DLXMatrix {
                 rowId++;
             }
         }
-        return new DLXMatrix(root, nodeList, rowNames, nRows, nCols);*/
+        return new DLXMatrix(root, nodeList, rowNames, nRows, nCols);
     }
 
     /**
